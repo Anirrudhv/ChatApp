@@ -13,6 +13,7 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
+        var refreshControl:UIRefreshControl!
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell") as! ChatCellTableViewCell
@@ -37,11 +38,25 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
     } else if let error = error {
     print("Problem saving message: \(error.localizedDescription)")
     }
+        
         }}
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        if let currentUser = PFUser.current() {
+            print("Welcome back \(currentUser.username!) 😀")
+            self.createAlert(title: "Welcome back", message: "Welcome back : \(currentUser.username!)")
+            
+        }
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector
+        (ChatViewController.didpullrequest(_refreshControl:)), for: .valueChanged)
+        TableView.insertSubview(refreshControl, at: 0)
+        
+        
+        
+        TableView.separatorStyle = .none
         TableView.estimatedRowHeight = 50
         TableView.rowHeight = UITableViewAutomaticDimension
         TableView.delegate = self
@@ -53,7 +68,10 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
             self.updateMessages()
         }
     }
-
+    @objc func didpullrequest(_refreshControl: UIRefreshControl){
+        updateMessages()
+        
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -93,7 +111,13 @@ class ChatViewController: UIViewController,UITableViewDataSource,UITableViewDele
                 // Log details of the failure
                 print("Error: \(error!) \(error!.localizedDescription)")
             }
+            self.refreshControl.endRefreshing()
         }
+    }
+    func createAlert(title : String, message : String){
+        let Alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        Alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {(action) in Alert.dismiss(animated: true, completion: nil)}))
+        self.present(Alert, animated: true, completion: nil)
     }
 
 }
