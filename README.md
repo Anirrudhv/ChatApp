@@ -28,9 +28,8 @@ The following **stretch** user stories are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<a href="https://imgflip.com/gif/2flkgf"><img src="https://i.imgflip.com/2flkgf.gif" title="made at imgflip.com"/></a>
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 
 ## License
